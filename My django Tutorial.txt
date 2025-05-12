@@ -63,4 +63,8 @@ then import the model one after the other
 
 // for django to communicate with html use this 
     {% %}
+
+// install pillow using this this pillow allows the user to upload there own personal images on the page 
+	pip install pillow
+NOTE: Before any installation make sure ur virtual environment is activated
    

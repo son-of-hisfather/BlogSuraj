@@ -1,5 +1,6 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
+from . models import Posts, Category, Tag
+from django.core.paginator import Paginator
 # Create your views here.
 def home(request):
     return render(request, "blog/index.html")
@@ -10,14 +11,54 @@ def about(request):
 def contact(request):
     return render(request, "blog/contact.html")
 
-def blog_details(request):
-    return render(request, 'blog/blog-details.html')
+def blog_details(request, pk):
+    posts = get_object_or_404(Posts, pk=pk)
+    return render(request, 'blog/blog-details.html',{
+        'posts': posts,
+        })
 
 def search_results(request):
-    return render(request, 'blog/search-results.html')
+    query = request.GET.get('q')
+    category_id = request.Get.get('category')
+    posts = Posts.objects.all().order_by('-id')
+
+    if query:
+        posts= posts.filter(tittle_icontains=query)
+
+    if category_id:
+        posts = posts.filter(category__id=category_id)
+
+    # if category_id and query:
+    #     posts = posts.filter(category__id=category_id).filter(tittle_icontains=query)
+
+    paginator = Paginator(posts, 6)
+    pageNumber = request.GET.get('page')
+    pagObj = paginator.get_page(pageNumber)
+
+    return render(request, 'blog/search-results.html',{
+        'query': query,
+        'pagObj': pagObj,
+        'category_id': category_id,
+    })
+
+
 
 def category(request):
-    return render(request, 'blog/category.html')
+    posts = Posts.objects.all().order_by('id')
+    category = Category.objects.all()
+    tag = Tag.objects.all()
+    recent_posts = Posts.objects.order_by('-id')[:5]
+    paginator =Paginator(posts,6)
+    pageNumber = request.GET.get('page')
+    pagObj = paginator.get_page(pageNumber)
+    return render(request, 'blog/category.html',
+                  {'posts': posts,
+                  'category': category,
+                  'tag': tag,
+                  'pagObj': pagObj,
+                  'recent_posts': recent_posts,
+                  })
+
 
 def author_profile(request):
     return render(request, 'blog/author-profile.html')

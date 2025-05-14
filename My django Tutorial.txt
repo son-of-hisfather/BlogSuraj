@@ -67,4 +67,6 @@ then import the model one after the other
 // install pillow using this this pillow allows the user to upload there own personal images on the page 
 	pip install pillow
 NOTE: Before any installation make sure ur virtual environment is activated
+
+how to maka the image added on admin to shw 
    

@@ -13,23 +13,29 @@ def contact(request):
 
 def blog_details(request, pk):
     posts = get_object_or_404(Posts, pk=pk)
+    category = Category.objects.all()
+    tag = Tag.objects.all()
+    recent_posts = Posts.objects.order_by('-id')[:5]
     return render(request, 'blog/blog-details.html',{
         'posts': posts,
+        'category': category,
+        'tag': tag,
+        'recent_posts': recent_posts
         })
 
 def search_results(request):
     query = request.GET.get('q')
-    category_id = request.Get.get('category')
+    category_id = request.GET.get('category')
     posts = Posts.objects.all().order_by('-id')
 
-    if query:
-        posts= posts.filter(tittle_icontains=query)
+    # if query:
+    #     posts= posts.filter(title_icontains=query)
 
-    if category_id:
-        posts = posts.filter(category__id=category_id)
+    # if category_id:
+    #     posts = posts.filter(category__id=category_id)
 
-    # if category_id and query:
-    #     posts = posts.filter(category__id=category_id).filter(tittle_icontains=query)
+    if category_id and query:
+        posts = posts.filter(category__id=category_id).filter(tittle_icontains=query)
 
     paginator = Paginator(posts, 6)
     pageNumber = request.GET.get('page')

@@ -3,71 +3,7 @@
 
 {% block content %} 
 
-{% comment %} <body class="blog-details-page">
 
-  <header id="header" class="header position-relative">
-    <div class="container-fluid container-xl position-relative">
-
-      <div class="top-row d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-end">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
-          <!-- <img src="assets/img/logo.webp" alt=""> -->
-          <h1 class="sitename">Blogy</h1><span>.</span>
-        </a>
-
-        <div class="d-flex align-items-center">
-          <div class="social-links">
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          </div>
-
-          <form class="search-form ms-4">
-            <input type="text" placeholder="Search..." class="form-control">
-            <button type="submit" class="btn"><i class="bi bi-search"></i></button>
-          </form>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="nav-wrap">
-      <div class="container d-flex justify-content-center position-relative">
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="category.html">Category</a></li>
-            <li><a href="blog-details.html" class="active">Blog Details</a></li>
-            <li><a href="author-profile.html">Author Profile</a></li>
-            <li class="dropdown"><a href="#"><span>Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="about.html">About</a></li>
-                <li><a href="category.html">Category</a></li>
-                <li><a href="blog-details.html" class="active">Blog Details</a></li>
-                <li><a href="author-profile.html">Author Profile</a></li>
-                <li><a href="search-results.html">Search Results</a></li>
-                <li><a href="404.html">404 Not Found Page</a></li>
-
-                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Deep Dropdown 1</a></li>
-                    <li><a href="#">Deep Dropdown 2</a></li>
-                    <li><a href="#">Deep Dropdown 3</a></li>
-                    <li><a href="#">Deep Dropdown 4</a></li>
-                    <li><a href="#">Deep Dropdown 5</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
-      </div>
-    </div>
-
-  </header> {% endcomment %}
 
   <main class="main">
 
@@ -76,16 +12,16 @@
       <div class="breadcrumbs">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#"><i class="bi bi-house"></i> Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Category</a></li>
+            <li class="breadcrumb-item"><a href="{% url "home" %}"><i class="bi bi-house"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url "category" %}">Category</a></li>
             <li class="breadcrumb-item active current">Blog Details</li>
           </ol>
         </nav>
       </div>
 
       <div class="title-wrapper">
-        <h1>Blog Details</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.</p>
+        <h1>{{posts.title}}</h1>
+        <p>{{posts.content|truncatewords:20}}</p>
       </div>
     </div><!-- End Page Title -->
 
@@ -101,10 +37,12 @@
               <article class="article">
 
                 <div class="hero-img" data-aos="zoom-in">
-                  <img src="{% static 'blog/img/blog/blog-post-3.webp' %}" alt="Featured blog image" class="img-fluid" loading="lazy">
+                  {% if posts.image %}
+                  <img src="{{posts.image.url}}" alt="Featured blog image" class="img-fluid" loading="lazy">
+                  {% endif %}
                   <div class="meta-overlay">
                     <div class="meta-categories">
-                      <a href="#" class="category">Web Development</a>
+                      <a href="#" class="category">{{posts.category.name}}</a>
                       <span class="divider">•</span>
                       <span class="reading-time"><i class="bi bi-clock"></i> 6 min read</span>
                     </div>
@@ -113,18 +51,18 @@
 
                 <div class="article-content" data-aos="fade-up" data-aos-delay="100">
                   <div class="content-header">
-                    <h1 class="title">Modern Web Development: Best Practices and Future Trends for 2025</h1>
+                    <h1 class="title">{{posts.title}}</h1>
 
                     <div class="author-info">
                       <div class="author-details">
                         <img src="{% static 'blog/img/person/person-f-8.webp' %}" alt="Author" class="author-img">
                         <div class="info">
-                          <h4>Michael Chen</h4>
+                          <h4>{{posts.author}}</h4>
                           <span class="role">Senior Web Developer</span>
                         </div>
                       </div>
                       <div class="post-meta">
-                        <span class="date"><i class="bi bi-calendar3"></i> Mar 15, 2025</span>
+                        <span class="date"><i class="bi bi-calendar3"></i>{{posts.date_posted}}</span>
                         <span class="divider">•</span>
                         <span class="comments"><i class="bi bi-chat-text"></i> 18 Comments</span>
                       </div>
@@ -132,7 +70,14 @@
                   </div>
 
                   <div class="content">
-                    <p class="lead">
+                    {% if posts.content %}
+                      {{posts.content|linebreaks}}
+                     {% else %}
+                      <p>No content available</p>
+                    {% endif %}
+                    
+
+                    {% comment %} <p class="lead">
                       The landscape of web development continues to evolve at an unprecedented pace, bringing new technologies, frameworks, and methodologies that reshape how we build modern web applications.
                     </p>
 
@@ -208,7 +153,8 @@
                     <h2>Looking Forward</h2>
                     <p>
                       As we continue through 2025, web development practices will further evolve, embracing new technologies while maintaining a strong foundation in performance, accessibility, and user experience. Staying updated with these trends and best practices is crucial for developers looking to build modern, scalable web applications.
-                    </p>
+                    </p> {% endcomment %}
+                  {% comment %} {% endif %} {% endcomment %}
                   </div>
 
                   <div class="meta-bottom">
@@ -500,16 +446,14 @@
 
               <h3 class="widget-title">Categories</h3>
               <ul class="mt-3">
-                <li><a href="#">General <span>(25)</span></a></li>
-                <li><a href="#">Lifestyle <span>(12)</span></a></li>
-                <li><a href="#">Travel <span>(5)</span></a></li>
-                <li><a href="#">Design <span>(22)</span></a></li>
-                <li><a href="#">Creative <span>(8)</span></a></li>
-                <li><a href="#">Educaion <span>(14)</span></a></li>
+                {% for category in category %}
+                <li><a href="#">{{category.name}}<span>(25)</span></a></li>
+                {% endfor %}
               </ul>
+                
 
             </div><!--/Categories Widget -->
-
+{% comment %} 
             <!-- Categories Widget -->
             <div class="categories-widget widget-item">
 
@@ -523,71 +467,43 @@
                 <li><a href="#">Educaion <span>(14)</span></a></li>
               </ul>
 
-            </div><!--/Categories Widget -->
+            </div><!--/Categories Widget --> {% endcomment %}
 
             <!-- Recent Posts Widget -->
             <div class="recent-posts-widget widget-item">
 
               <h3 class="widget-title">Recent Posts</h3>
+              {% for recent_posts in recent_posts  %}
 
-              <div class="post-item">
-                <img src="{% static 'blog/img/blog/blog-post-square-1.webp' %}" alt="" class="flex-shrink-0">
-                <div>
-                  <h4><a href="blog-details.html">Nihil blanditiis at in nihil autem</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-              </div><!-- End recent post item-->
+                <div class="post-item">
+                  {% if recent_posts.image.url %}
+                  <img src="{{recent_posts.image.url}}" alt="{{recent_posts.title}}" class="flex-shrink-0">
+                  {% endif %}
+                  <div>
+                    <h4><a href="{% url "blog_details" recent_posts.id %}">{{recent_posts.title}}</a></h4>
+                    <time datetime="2020-01-01">{{recent_posts.date_posted}}</time>
+                  </div>
+                </div><!-- End recent post item-->
+              {% endfor %}
+              
 
-              <div class="post-item">
-                <img src="{% static 'blog/img/blog/blog-post-square-2.webp' %}" alt="" class="flex-shrink-0">
-                <div>
-                  <h4><a href="blog-details.html">Quidem autem et impedit</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-              </div><!-- End recent post item-->
-
-              <div class="post-item">
-                <img src="{% static 'blog/img/blog/blog-post-square-3.webp' %}" alt="" class="flex-shrink-0">
-                <div>
-                  <h4><a href="blog-details.html">Id quia et et ut maxime similique occaecati ut</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-              </div><!-- End recent post item-->
-
-              <div class="post-item">
-                <img src="{% static 'blog/img/blog/blog-post-square-4.webp' %}" alt="" class="flex-shrink-0">
-                <div>
-                  <h4><a href="blog-details.html">Laborum corporis quo dara net para</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-              </div><!-- End recent post item-->
-
-              <div class="post-item">
-                <img src="{% static 'blog/img/blog/blog-post-square-5.webp' %}" alt="" class="flex-shrink-0">
-                <div>
-                  <h4><a href="blog-details.html">Et dolores corrupti quae illo quod dolor</a></h4>
-                  <time datetime="2020-01-01">Jan 1, 2020</time>
-                </div>
-              </div><!-- End recent post item-->
-
+              
             </div><!--/Recent Posts Widget -->
+
+
+           
+
+              
+
 
             <!-- Tags Widget -->
             <div class="tags-widget widget-item">
 
               <h3 class="widget-title">Tags</h3>
               <ul>
-                <li><a href="#">App</a></li>
-                <li><a href="#">IT</a></li>
-                <li><a href="#">Business</a></li>
-                <li><a href="#">Mac</a></li>
-                <li><a href="#">Design</a></li>
-                <li><a href="#">Office</a></li>
-                <li><a href="#">Creative</a></li>
-                <li><a href="#">Studio</a></li>
-                <li><a href="#">Smart</a></li>
-                <li><a href="#">Tips</a></li>
-                <li><a href="#">Marketing</a></li>
+                {% for tag in tag %}
+                <li><a href="#">{{tag.name}}</a></li>
+                {% endfor %}
               </ul>
 
             </div><!--/Tags Widget -->

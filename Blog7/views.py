@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from . models import Posts, Category, Tag
+from django.shortcuts import redirect, render, get_object_or_404
+from . models import Posts, Category, Tag, Comment, Contact
 from django.core.paginator import Paginator
+from django.contrib import messages
 # Create your views here.
 def home(request):
     return render(request, "blog/index.html")
@@ -9,19 +10,68 @@ def about(request):
     return render(request, "blog/about.html")
 
 def contact(request):
-    return render(request, "blog/contact.html")
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        service = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        if name and email and phone and service and message:
+            contact = Contact.objects.create(
+                name = name,
+                email = email,
+                phone = phone,
+                service = service,
+                message = message,
+            )
+            messages.success(request, "Your message has been sent. Thank you!")
+            return redirect('contact')
+        else:
+            messages.error(request, "Please fill in all fields.")
+            return redirect('contact')
+
+    return render(request, "blog/contact.html",{
+        'contact': Contact,
+    })
+        
+                  
+
 
 def blog_details(request, pk):
     posts = get_object_or_404(Posts, pk=pk)
     category = Category.objects.all()
     tag = Tag.objects.all()
     recent_posts = Posts.objects.order_by('-id')[:5]
+    comments = Comment.objects.filter(posts=posts, parent__isnull=True).order_by('-created_at')
+
+    if request.method =="POST":
+        name = request.POST.get('name')
+        email= request.POST.get('email')
+        website = request.POST.get('website')
+        content = request.POST.get('comment')
+        parent_id = request.POST.get('parent_id')
+
+
+        if name and email and content:
+            comment = Comment.objects.create(
+                posts=posts,
+                name=name,
+                email=email,
+                website=website,
+                content=content,
+                parent = Comment.objects.get(id=parent_id) if parent_id else None
+            )
+            return redirect('blog_details', pk=posts.pk)
+        
     return render(request, 'blog/blog-details.html',{
         'posts': posts,
         'category': category,
         'tag': tag,
-        'recent_posts': recent_posts
-        })
+        'recent_posts': recent_posts,
+        'comments': comments, 
+    })
+    
 
 def search_results(request):
     query = request.GET.get('q')

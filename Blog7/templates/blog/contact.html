@@ -65,7 +65,8 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="form-wrapper" data-aos="fade-up" data-aos-delay="400">
-              <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <form action="{% url 'contact' %}" method="POST" role="form">
+                    {% csrf_token %}
                 <div class="row">
                   <div class="col-md-6 form-group">
                     <div class="input-group">
@@ -105,11 +106,31 @@
                       <textarea class="form-control" name="message" rows="6" placeholder="Write a message*" required=""></textarea>
                     </div>
                   </div>
-                  <div class="my-3">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                  </div>
+                  {% if messages %}
+                      <div class="my-3">
+                        <div class="loading" style="display:none;">Loading...</div>
+                        {% for message in messages %}
+                          {% if message.tags == "success" %}
+                            <div class="sent-message">{{ message }}</div>
+                          {% elif message.tags == "error" %}
+                            <div class="error-message">{{ message }}</div>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                  {% endif %}
+
+                  <script>
+                      const form = document.querySelector("form");
+                      const loadingDiv = document.querySelector(".loading");
+                      
+                      form.addEventListener("submit", () => {
+                        loadingDiv.style.display = "block";
+                      });
+
+                      window.addEventListener("load", () => {
+                        loadingDiv.style.display = "none";
+                      });
+                  </script>
                   <div class="text-center">
                     <button type="submit">Submit Message</button>
                   </div>

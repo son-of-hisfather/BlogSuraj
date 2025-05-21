@@ -84,12 +84,17 @@
                     <p>
                       As we delve into 2025, the web development ecosystem has transformed dramatically, introducing innovative approaches to building faster, more secure, and highly engaging web experiences. This comprehensive guide explores the latest trends and best practices that are defining the future of web development.
                     </p>
+                    {% endcomment %}
+                   
 
                     <div class="content-image right-aligned">
-                      <img src="{% static 'blog/img/blog/blog-hero-2.webp' %}" class="img-fluid" alt="Modern web development tools" loading="lazy">
-                      <figcaption>Modern development environments emphasize collaboration and efficiency</figcaption>
+                      {% if posts.image %}
+                      <img src="{{posts.image.url}}" class="img-fluid" alt="Modern web development tools" loading="lazy">
+                      {% endif %}
+                      <figcaption>{{posts.title |truncatewords:10}}</figcaption>
                     </div>
 
+                       {% comment %}
                     <h2>The Rise of Web Components</h2>
                     <p>
                       Web Components have become increasingly crucial in modern web development, offering a standardized way to create reusable custom elements. Key advantages include:
@@ -235,6 +240,7 @@
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
+              
               <div class="blog-comments-3">
                 <div class="section-header">
                   <h3>Discussion <span class="comment-count">(8)</span></h3>
@@ -242,18 +248,19 @@
 
                 <div class="comments-wrapper">
                   <!-- Comment 1 -->
+                  {% for comment in comments  %}
                   <article class="comment-card">
                     <div class="comment-header">
                       <div class="user-info">
                         <img src="{% static 'blog/img/person/person-f-9.webp' %}" alt="User avatar" loading="lazy">
                         <div class="meta">
-                          <h4 class="name">Sarah Williams</h4>
-                          <span class="date"><i class="bi bi-calendar3"></i> February 13, 2025</span>
+                          <h4 class="name">{{comment.name}}</h4>
+                          <span class="date"><i class="bi bi-calendar3"></i> {{comment.created_at|date:"M d, Y"}}</span>
                         </div>
                       </div>
                     </div>
                     <div class="comment-content">
-                      <p>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.</p>
+                      <p>{{comment.content}}</p>
                     </div>
                     <div class="comment-actions">
                       <button class="action-btn like-btn">
@@ -264,8 +271,10 @@
                         <i class="bi bi-reply"></i>
                         <span>Reply</span>
                       </button>
+
                     </div>
                   </article>
+                  {% endfor %}
 
                   <!-- Comment 2 with replies -->
                   <article class="comment-card">
@@ -377,6 +386,7 @@
               </div>
 
             </div>
+          
 
           </section><!-- /Blog Comments Section -->
 
@@ -385,8 +395,8 @@
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-              <form method="post" role="form">
-
+              <form method="POST"  role="form">
+                      {%  csrf_token  %}
                 <div class="section-header">
                   <h3>Share Your Thoughts</h3>
                   <p>Your email address will not be published. Required fields are marked *</p>
@@ -412,9 +422,9 @@
                     <label for="comment">Your Comment *</label>
                     <textarea class="form-control" name="comment" id="comment" rows="5" placeholder="Write your thoughts here..." required=""></textarea>
                   </div>
-
+                    <input type='hidden' name='parent_id' id="parent_id" value="">
                   <div class="col-12 text-center">
-                    <button type="submit" class="btn-submit">Post Comment</button>
+                    <button type="submit" name="submit" value="Submit" class="btn-submit">Post Comment</button>
                   </div>
                 </div>
 
@@ -434,7 +444,7 @@
             <div class="search-widget widget-item">
 
               <h3 class="widget-title">Search</h3>
-              <form action="">
+              <form action="{% url "search_results" %}" method= "GET">
                 <input type="text">
                 <button type="submit" title="Search"><i class="bi bi-search"></i></button>
               </form>

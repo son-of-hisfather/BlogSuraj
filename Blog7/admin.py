@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import Posts, Tag, Category,Comment, Contact
+from . models import Posts, Tag, Category,Comment, Contact, Author, Expertise, Team
 
 # Register your models here.
 
@@ -23,6 +23,20 @@ search_fields = ['posts', 'name', 'email', 'website', 'content',]
 admin.site.register(Contact)
 list_display = ['name', 'email', 'phone', 'service', 'message']
 search_fields = ['name', 'email', 'phone', 'service', 'message']
+
+admin.site.register(Author)
+list_display = ['name', 'bio']
+search_fields = ['name', 'bio']
+
+admin.site.register(Expertise)
+list_display = ['name']
+search_fields = ['name']
+
+admin.site.register(Team)
+list_display = ['name', 'position', 'bio']
+search_fields = ['name', 'position', 'bio']
+
+
 
 
 

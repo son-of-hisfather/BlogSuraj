@@ -15,11 +15,18 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+class Expertise(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
 class Tag(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
+    
 
 
 class Posts(models.Model):
@@ -60,4 +67,35 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    position = models.CharField(max_length=50, null=True)
+    bio = models.TextField()
+    content = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profiles/')
+    social_x = models.URLField(blank=True)
+    social_facebook = models.URLField(blank=True)
+    social_instagram = models.URLField(blank=True)
+    social_linkedin = models.URLField(blank=True)
+    articles_count = models.IntegerField(default=0)
+    awards_count = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    expertise = models.ManyToManyField(Expertise, blank=True)
+     
+    def __str__(self):
+        return self.name
+    
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    position = models.CharField(max_length=50)
+    profile_picture = models.ImageField(upload_to='profiles/')
+    bio = models.TextField()
+    social_facebook = models.URLField(blank=True)
+    social_x = models.URLField(blank=True)
+    social_linkedin = models.URLField(blank=True)
+    social_youtube = models.URLField(blank=True)
+
+
     

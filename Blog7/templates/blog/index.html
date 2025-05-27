@@ -126,86 +126,28 @@
           </script>
 
           <div class="swiper-wrapper">
+            {% for recent_posts in recent_posts %}
             <div class="swiper-slide">
               <div class="blog-post-item">
-                <img src="{% static 'blog/img/blog/blog-post-portrait-1.webp' %}" alt="Blog Image">
+                 {% if recent_posts.image.url %}
+                <img src="{{recent_posts.image.url}}" alt="{{recent_posts.title}}">
+                 {% endif %}
                 <div class="blog-post-content">
                   <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Julia Parker</span>
-                    <span><i class="bi bi-clock"></i> Jan 15, 2025</span>
+                    <span><i class="bi bi-person"></i> {{recent_posts.author}}</span>
+                    <span><i class="bi bi-clock"></i> {{recent_posts.date_posted}}</span>
                     <span><i class="bi bi-chat-dots"></i> 6 Comments</span>
                   </div>
-                  <h2><a href="#">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet</a></h2>
-                  <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce porttitor metus eget lectus consequat, sit amet feugiat magna vulputate.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
+                  <h2><a href="{% url "blog_details" recent_posts.id %}">{{recent_posts.title}}</a></h2>
+                  <p>{{recent_posts.content|truncatewords:10}}</p>
+                  <a href="{% url "blog_details" recent_posts.id %}" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
             </div><!-- End slide item -->
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{% static 'blog/img/blog/blog-post-portrait-2.webp' %}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Mark Wilson</span>
-                    <span><i class="bi bi-clock"></i> Jan 18, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 6 Comments</span>
-                  </div>
-                  <h2><a href="#">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</a></h2>
-                  <p>Maecenas tempus tellus eget condimentum rhoncus sem quam semper libero sit amet adipiscing sem neque sed ipsum.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div><!-- End slide item -->
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{% static 'blog/img/blog/blog-post-portrait-3.webp' %}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Sarah Johnson</span>
-                    <span><i class="bi bi-clock"></i> Jan 21, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 15 Comments</span>
-                  </div>
-                  <h2><a href="#">At vero eos et accusamus et iusto odio dignissimos ducimus</a></h2>
-                  <p>Nullam dictum felis eu pede mollis pretium integer tincidunt cras dapibus vivamus elementum semper nisi.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div><!-- End slide item -->
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{% static 'blog/img/blog/blog-post-portrait-4.webp' %}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> David Brown</span>
-                    <span><i class="bi bi-clock"></i> Jan 24, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 10 Comments</span>
-                  </div>
-                  <h2><a href="#">Et harum quidem rerum facilis est et expedita distinctio</a></h2>
-                  <p>Donec quam felis ultricies nec pellentesque eu pretium quis sem nulla consequat massa quis enim.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div><!-- End slide item -->
-
-            <div class="swiper-slide">
-              <div class="blog-post-item">
-                <img src="{% static 'blog/img/blog/blog-post-portrait-5.webp' %}" alt="Blog Image">
-                <div class="blog-post-content">
-                  <div class="post-meta">
-                    <span><i class="bi bi-person"></i> Emma Davis</span>
-                    <span><i class="bi bi-clock"></i> Jan 27, 2025</span>
-                    <span><i class="bi bi-chat-dots"></i> 6 Comments</span>
-                  </div>
-                  <h2><a href="#">Nam libero tempore, cum soluta nobis est eligendi optio</a></h2>
-                  <p>Aenean leo ligula porttitor eu consequat vitae eleifend ac enim aliquam lorem ante dapibus in viverra.</p>
-                  <a href="#" class="read-more">Read More <i class="bi bi-arrow-right"></i></a>
-                </div>
-              </div>
-            </div><!-- End slide item -->
+            {% endfor %}
+            
           </div>
+
 
         </div>
 
@@ -225,191 +167,59 @@
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <!-- Featured Posts -->
         <div class="row gy-4 mb-4">
+          {% for featured_post in featured_posts  %}
           <div class="col-lg-4">
             <article class="featured-post">
+              {% if featured_post.image %}
               <div class="post-img">
-                <img src="assets/img/blog/blog-post-6.webp" alt="" class="img-fluid" loading="lazy">
+                <img src="{{featured_post.image.url}}" alt="{{featured_post.title}}" class="img-fluid" loading="lazy">
+                {% endif %}
               </div>
               <div class="post-content">
                 <div class="category-meta">
-                  <span class="post-category">Health</span>
+                  <span class="post-category">{{featured_post.category}}</span>
                   <div class="author-meta">
                     <img src="{% static 'blog/img/person/person-f-13.webp' %}" alt="" class="author-img">
-                    <span class="author-name">William G.</span>
-                    <span class="post-date">28 April 2024</span>
+                    <span class="author-name">{{featured_post.author}}</span>
+                    <span class="post-date">{{featured_post.date_posted}}</span>
                   </div>
                 </div>
                 <h2 class="title">
-                  <a href="blog-details.html">Sed ut perspiciatis unde omnis iste natus error sit voluptatem</a>
+                  <a href="{% url "blog_details" featured_post.id %}">{{featured_post.title}}</a>
                 </h2>
               </div>
             </article>
           </div>
+          {% endfor %}
 
-          <div class="col-lg-4">
-            <article class="featured-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-7.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Education</span>
-                  <div class="author-meta">
-                    <img src="{% static 'blog/img/person/person-m-10.webp' %}" alt="" class="author-img">
-                    <span class="author-name">Emma D.</span>
-                    <span class="post-date">30 May 2024</span>
-                  </div>
-                </div>
-                <h2 class="title">
-                  <a href="blog-details.html">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis</a>
-                </h2>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-lg-4">
-            <article class="featured-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-5.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                  <div class="author-meta">
-                    <img src="{% static 'blog/img/person/person-f-14.webp' %}" alt="" class="author-img">
-                    <span class="author-name">James F.</span>
-                    <span class="post-date">3 June 2024</span>
-                  </div>
-                </div>
-                <h2 class="title">
-                  <a href="blog-details.html">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit</a>
-                </h2>
-              </div>
-            </article>
-          </div>
-        </div>
+          
 
         <!-- List Posts -->
         <div class="row">
+          {% for post  in category_posts  %}
           <div class="col-xl-4 col-lg-6">
             <article class="list-post">
+              {% if post.image %}
               <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-6.webp' %}" alt="" class="img-fluid" loading="lazy">
+                <img src="{{post.image.url}}" alt="{{post.title}}" class="img-fluid" loading="lazy">
+                {% endif %}
               </div>
               <div class="post-content">
                 <div class="category-meta">
-                  <span class="post-category">Gaming</span>
+                  <span class="post-category">{{post.category}}</span>
                 </div>
                 <h3 class="title">
-                  <a href="blog-details.html">Quis autem vel eum iure reprehenderit qui in ea voluptate</a>
+                  <a href="{% url "blog_details" post.id %}">{{post.title}}</a>
                 </h3>
                 <div class="post-meta">
                   <span class="read-time">2 mins read</span>
-                  <span class="post-date">6 April 2026</span>
+                  <span class="post-date">{{post.date_posted}}</span>
                 </div>
               </div>
             </article>
           </div>
+          {% endfor %}
 
-          <div class="col-xl-4 col-lg-6">
-            <article class="list-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-9.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                </div>
-                <h3 class="title">
-                  <a href="blog-details.html">At vero eos et accusamus et iusto</a>
-                </h3>
-                <div class="post-meta">
-                  <span class="read-time">2 mins read</span>
-                  <span class="post-date">12 June 2026</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-xl-4 col-lg-6">
-            <article class="list-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-10.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                </div>
-                <h3 class="title">
-                  <a href="blog-details.html">Et harum quidem rerum facilis est et expedita distinctio</a>
-                </h3>
-                <div class="post-meta">
-                  <span class="read-time">2 mins read</span>
-                  <span class="post-date">9 May 2026</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-xl-4 col-lg-6">
-            <article class="list-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-2.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                </div>
-                <h3 class="title">
-                  <a href="blog-details.html">Nam libero tempore, cum soluta nobis est eligendi</a>
-                </h3>
-                <div class="post-meta">
-                  <span class="read-time">2 mins read</span>
-                  <span class="post-date">15 July 2026</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-xl-4 col-lg-6">
-            <article class="list-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-1.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                </div>
-                <h3 class="title">
-                  <a href="blog-details.html">Temporibus autem quibusdam et aut officiis debitis</a>
-                </h3>
-                <div class="post-meta">
-                  <span class="read-time">2 mins read</span>
-                  <span class="post-date">18 August 2026</span>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col-xl-4 col-lg-6">
-            <article class="list-post">
-              <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-3.webp' %}" alt="" class="img-fluid" loading="lazy">
-              </div>
-              <div class="post-content">
-                <div class="category-meta">
-                  <span class="post-category">Gaming</span>
-                </div>
-                <h3 class="title">
-                  <a href="blog-details.html">Itaque earum rerum hic tenetur a sapiente delectus</a>
-                </h3>
-                <div class="post-meta">
-                  <span class="read-time">2 mins read</span>
-                  <span class="post-date">21 September 2026</span>
-                </div>
-              </div>
-            </article>
-          </div>
         </div>
       </div>
 
@@ -483,34 +293,36 @@
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
-
+          {% for latest_post in latest_posts  %}
           <div class="col-lg-4">
             <article>
-
+              {% if latest_post.image %}
               <div class="post-img">
-                <img src="{% static 'blog/img/blog/blog-post-1.webp' %}" alt="" class="img-fluid">
+                <img src="{{latest_post.image.url}}" alt="{{latest_post.title}}" class="img-fluid">
+                {%endif %}
               </div>
 
-              <p class="post-category">Politics</p>
+              <p class="post-category">{{latest_post.category}}</p>
 
               <h2 class="title">
-                <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
+                <a href="{% url "blog_details" latest_post.id %}">{{latest_post.title}}</a>
               </h2>
 
               <div class="d-flex align-items-center">
                 <img src="{% static 'blog/img/person/person-f-12.webp' %}" alt="" class="img-fluid post-author-img flex-shrink-0">
                 <div class="post-meta">
-                  <p class="post-author">Maria Doe</p>
+                  <p class="post-author">{{latest_post.author}}</p>
                   <p class="post-date">
-                    <time datetime="2022-01-01">Jan 1, 2022</time>
+                    <time datetime="2022-01-01">{{latest_post.date_posted}}</time>
                   </p>
                 </div>
               </div>
 
             </article>
           </div><!-- End post list item -->
+          {% endfor %}
 
-          <div class="col-lg-4">
+          {% comment %} <div class="col-lg-4">
             <article>
 
               <div class="post-img">
@@ -638,7 +450,7 @@
               </div>
 
             </article>
-          </div><!-- End post list item -->
+          </div><!-- End post list item --> {% endcomment %}
 
         </div>
       </div>

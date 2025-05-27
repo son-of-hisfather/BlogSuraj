@@ -1,13 +1,33 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from . models import Posts, Category, Tag, Comment, Contact
+from . models import Posts, Category, Tag, Comment, Contact, Author, Team
 from django.core.paginator import Paginator
 from django.contrib import messages
 # Create your views here.
 def home(request):
-    return render(request, "blog/index.html")
+    recent_posts = Posts.objects.order_by('-id')[:5]
+    featured_posts = Posts.objects.filter(category__name='Forex').order_by('-date_posted')[:3]
+    category = Category.objects.all()
+    latest_posts = Posts.objects.order_by('-date_posted')[:6]
+    category_posts= []
+    for cat in category:
+        post = Posts.objects.filter(category=cat).order_by('-date_posted').first()
+        if post:
+            category_posts.append(post)
+
+    return render(request, "blog/index.html", {
+        'recent_posts': recent_posts,
+        'latest_posts': latest_posts,
+        'featured_posts': featured_posts,
+        'category_posts': category_posts,})
 
 def about(request):
-    return render(request, "blog/about.html")
+    teams = Team.objects.all()
+    return render(request, 'blog/about.html',{
+        "teams": teams
+    })
+
+    
+
 
 def contact(request):
     if request.method == "POST":
@@ -117,7 +137,16 @@ def category(request):
 
 
 def author_profile(request):
-    return render(request, 'blog/author-profile.html')
+    # author = get_object_or_404(Author, pk=pk)
+    authors = Author.objects.all()
+    return render(request, 'blog/author-profile.html',{
+        "authors": authors
+    })
+
+
+
+
+
 
 def not_found(request):
     return render(request, 'blog/404.html')

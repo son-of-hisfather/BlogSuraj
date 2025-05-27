@@ -3,71 +3,6 @@
 
 {% block content %} 
 
-{% comment %} <body class="author-profile-page"> {% endcomment %}
-
-  {% comment %} <header id="header" class="header position-relative">
-    <div class="container-fluid container-xl position-relative">
-
-      <div class="top-row d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-end">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
-          <!-- <img src="assets/img/logo.webp" alt=""> -->
-          <h1 class="sitename">Blogy</h1><span>.</span>
-        </a>
-
-        <div class="d-flex align-items-center">
-          <div class="social-links">
-            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          </div>
-
-          <form class="search-form ms-4">
-            <input type="text" placeholder="Search..." class="form-control">
-            <button type="submit" class="btn"><i class="bi bi-search"></i></button>
-          </form>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="nav-wrap">
-      <div class="container d-flex justify-content-center position-relative">
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="category.html">Category</a></li>
-            <li><a href="blog-details.html">Blog Details</a></li>
-            <li><a href="author-profile.html" class="active">Author Profile</a></li>
-            <li class="dropdown"><a href="#"><span>Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="about.html">About</a></li>
-                <li><a href="category.html">Category</a></li>
-                <li><a href="blog-details.html">Blog Details</a></li>
-                <li><a href="author-profile.html" class="active">Author Profile</a></li>
-                <li><a href="search-results.html">Search Results</a></li>
-                <li><a href="404.html">404 Not Found Page</a></li>
-
-                <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                  <ul>
-                    <li><a href="#">Deep Dropdown 1</a></li>
-                    <li><a href="#">Deep Dropdown 2</a></li>
-                    <li><a href="#">Deep Dropdown 3</a></li>
-                    <li><a href="#">Deep Dropdown 4</a></li>
-                    <li><a href="#">Deep Dropdown 5</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
-      </div>
-    </div>
-
-  </header> {% endcomment %}
 
   <main class="main">
 
@@ -93,45 +28,48 @@
     <section id="author-profile" class="author-profile section">
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
+        
         <div class="author-profile-1">
+          {% for author in  authors  %}
 
           <div class="row">
             <!-- Author Info -->
             <div class="col-lg-4 mb-4 mb-lg-0">
               <div class="author-card" data-aos="fade-up">
                 <div class="author-image">
-                  <img src="{% static 'blog/img/person/person-m-5.webp' %}" alt="Author" class="img-fluid rounded">
+                  <img src="{{ author.profile_picture.url }}" alt="{{author.name}}" class="img-fluid rounded">
                 </div>
 
                 <div class="author-info">
-                  <h2>Kevin Anderson</h2>
-                  <p class="designation">Senior Technology Writer</p>
+                  <h2>{{author.name}}</h2>
+                  <p class="designation">{{author.position}}</p>
 
                   <div class="author-bio">
-                    Through my articles, I explore the intersection of technology and society, focusing on how emerging tech shapes our daily lives and future possibilities.
+                    {{author.bio}}
                   </div>
 
                   <div class="author-stats d-flex justify-content-between text-center my-4">
                     <div class="stat-item">
-                      <h4 data-purecounter-start="0" data-purecounter-end="147" data-purecounter-duration="1" class="purecounter"></h4>
+                      <h4 data-purecounter-start="0" data-purecounter-end="{{author.articles_count}}" data-purecounter-duration="1" class="purecounter"></h4>
                       <p>Articles</p>
                     </div>
                     <div class="stat-item">
-                      <h4 data-purecounter-start="0" data-purecounter-end="13" data-purecounter-duration="1" class="purecounter"></h4>
+                      <h4 data-purecounter-start="0" data-purecounter-end="{{author.awards_count}}" data-purecounter-duration="1" class="purecounter"></h4>
                       <p>Awards</p>
                     </div>
                     <div class="stat-item">
-                      <h4 data-purecounter-start="0" data-purecounter-end="25" data-purecounter-duration="1" class="purecounter">K</h4>
+                      <h4 data-purecounter-start="0" data-purecounter-end="{{author.followers_count}}" data-purecounter-duration="1" class="purecounter">K</h4>
                       <p>Followers</p>
                     </div>
                   </div>
 
                   <div class="social-links">
-                    <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    {% if author.social_x %}<a href="{{author.social_x}}" class="twitter"><i class="bi bi-twitter-x"></i></a>{% endif %}
+                    {% if author.social_instagram %}<a href="{{author.social_instagram}}" class="instagram"><i class="bi bi-instagram"></i></a> {% endif %}
+                    {% if author.social_facebook %}<a href="{{author.social_facebook}}" class="facebook"><i class="bi bi-facebook"></i></a> {% endif %}
+                    {% if author.social_linkedin %}<a href="{{author.social_linkedin}}" class="linkedin"><i class="bi bi-linkedin"></i></a>{%endif%}
+                   
+                    
                   </div>
                 </div>
               </div>
@@ -144,17 +82,14 @@
                   <h3>About Me</h3>
                 </div>
                 <div class="content-body">
-                  <p>With over a decade of experience in technology journalism, I've had the privilege of witnessing and documenting the rapid evolution of our digital landscape. My work spans from in-depth analysis of artificial intelligence and its implications to hands-on reviews of the latest consumer technology.</p>
+                  <p>{{author.content}}</p>
 
                   <div class="expertise-areas">
                     <h4>Areas of Expertise</h4>
                     <div class="tags">
-                      <span>Artificial Intelligence</span>
-                      <span>Cybersecurity</span>
-                      <span>Smart Home Technology</span>
-                      <span>Digital Privacy</span>
-                      <span>Consumer Electronics</span>
-                      <span>Future Tech Trends</span>
+                      {% for expertise in author.expertise.all  %}
+                      <span>{{expertise.name}}</span>
+                      {% endfor %}
                     </div>
                   </div>
 
@@ -201,7 +136,7 @@
           </div>
 
         </div>
-
+        {% endfor %}
       </div>
 
     </section><!-- /Author Profile Section -->
